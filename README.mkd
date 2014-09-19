@@ -1,0 +1,5 @@
+# dts-mode --- A devicetree major mode for emacs
+
+This is a quick attempt at getting basic highlighting for [devicetree][] syntax in emacs.
+
+[devicetree]: http://www.devicetree.org/
