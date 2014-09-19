@@ -17,7 +17,7 @@
     ;; names like `name: hi {`
     (,(concat (dts-re-grab dts-re-ident) ":") 1 font-lock-variable-name-face)
     ;; nodes
-    (,(concat (dts-re-grab dts-re-ident) "\\(@[[:digit:]]+\\)?[[:space:]]*{") 1 font-lock-type-face)
+    (,(concat (dts-re-grab dts-re-ident) "\\(@[[:xdigit:]]+\\)?[[:space:]]*{") 1 font-lock-type-face)
     ;; assignments
     (,(concat (dts-re-grab dts-re-ident) "[[:space:]]*=") 1 font-lock-variable-name-face)
     (,(concat (dts-re-grab dts-re-ident) "[[:space:]]*;") 1 font-lock-variable-name-face)
