@@ -8,4 +8,4 @@ pretty; pull requests welcome.
 
 ## Installation
 
-Available through [melpa](http://melpa.milkbox.net/#/). Alternatively ensure `dts-mode.el` is available in `load-path` and `(require 'dts-mode)`.
+Available through [MELPA](http://melpa.milkbox.net/#/). Alternatively ensure `dts-mode.el` is available in `load-path` and `(require 'dts-mode)`.
