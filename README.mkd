@@ -5,3 +5,7 @@ This is a quick attempt at getting basic highlighting for
 pretty; pull requests welcome.
 
 [devicetree]: http://www.devicetree.org/
+
+## Installation
+
+Simply `(require 'dts-mode)`.
