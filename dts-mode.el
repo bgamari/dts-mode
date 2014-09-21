@@ -70,3 +70,5 @@
 
 (add-to-list 'auto-mode-alist '("\\.dts\\'" . dts-mode))
 (add-to-list 'auto-mode-alist '("\\.dtsi\\'" . dts-mode))
+
+;;; dts-mode.el ends here
