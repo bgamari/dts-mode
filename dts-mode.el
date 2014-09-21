@@ -1,28 +1,43 @@
-;;; dts-mode.el --- A major emacs mode for editing Devicetree source code
+;;; dts-mode.el --- Major mode for Devicetree source code
+
+;; Copyright (C) 2014  Ben Gamari
 
 ;; Version: 0.1.0
 ;; Author: Ben Gamari <ben@smart-cactus.org>
-;; Url: http://github.com/bgamari/dts-mode
+;; Keywords: languages
 
 ;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License version 2 as
-;; published by the Free Software Foundation.
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
 
-(defconst dts-re-ident "[[:word:]_][[:word:][:multibyte:]_,[:digit:]-]*")
-(defun dts-re-word (inner) (concat "\\<" inner "\\>"))
-(defun dts-re-grab (inner) (concat "\\(" inner "\\)"))
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;;
+
+;;; Code:
+
+(defconst dts-re-ident "\\([[:word:]_][[:word:][:multibyte:]_,[:digit:]-]*\\)")
 
 (defvar dts-mode-font-lock-keywords
   `(
     ;; names like `name: hi {`
-    (,(concat (dts-re-grab dts-re-ident) ":") 1 font-lock-variable-name-face)
+    (,(concat dts-re-ident ":") 1 font-lock-variable-name-face)
     ;; nodes
-    (,(concat (dts-re-grab dts-re-ident) "\\(@[[:xdigit:]]+\\)?[[:space:]]*{") 1 font-lock-type-face)
+    (,(concat dts-re-ident "\\(@[[:xdigit:]]+\\)?[[:space:]]*{") 1 font-lock-type-face)
     ;; assignments
-    (,(concat (dts-re-grab dts-re-ident) "[[:space:]]*=") 1 font-lock-variable-name-face)
-    (,(concat (dts-re-grab dts-re-ident) "[[:space:]]*;") 1 font-lock-variable-name-face)
+    (,(concat dts-re-ident "[[:space:]]*=") 1 font-lock-variable-name-face)
+    (,(concat dts-re-ident "[[:space:]]*;") 1 font-lock-variable-name-face)
     ;; references
-    (,(concat "\\&" (dts-re-grab dts-re-ident)) 1 font-lock-variable-name-face)
+    (,(concat "\\&" dts-re-ident) 1 font-lock-variable-name-face)
     )
   )
 
@@ -52,23 +67,24 @@
 
     table))
 
-(define-derived-mode dts-mode prog-mode "Devicetree"
+(defalias 'dts-parent-mode
+  (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
+
+(define-derived-mode dts-mode dts-parent-mode "Devicetree"
   "Major mode for editing Devicetrees"
   :group 'dts-mode
   :syntax-table dts-mode-syntax-table
 
   ;; Fonts
-  (setq-local font-lock-defaults '(dts-mode-font-lock-keywords nil nil nil nil))
+  (set (make-local-variable 'font-lock-defaults) '(dts-mode-font-lock-keywords nil nil nil nil))
 
-  (setq-local comment-start "/* ")
-  (setq-local comment-end   " */")
-  (setq-local indent-tabs-mode nil)
-  (setq-local comment-multi-line t)
-)
-
-(provide 'dts-mode)
+  (set (make-local-variable 'comment-start) "/* ")
+  (set (make-local-variable 'comment-end)   " */")
+  (set (make-local-variable 'indent-tabs-mode) nil)
+  (set (make-local-variable 'comment-multi-line) t))
 
 (add-to-list 'auto-mode-alist '("\\.dts\\'" . dts-mode))
 (add-to-list 'auto-mode-alist '("\\.dtsi\\'" . dts-mode))
 
+(provide 'dts-mode)
 ;;; dts-mode.el ends here
