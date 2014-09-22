@@ -70,6 +70,7 @@
 (defalias 'dts-parent-mode
   (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
 
+;;;###autoload
 (define-derived-mode dts-mode dts-parent-mode "Devicetree"
   "Major mode for editing Devicetrees"
   :group 'dts-mode
@@ -83,7 +84,9 @@
   (set (make-local-variable 'indent-tabs-mode) nil)
   (set (make-local-variable 'comment-multi-line) t))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dts\\'" . dts-mode))
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dtsi\\'" . dts-mode))
 
 (provide 'dts-mode)
