@@ -67,9 +67,34 @@
 
     table))
 
+(defun dts--calculate-indentation ()
+  (interactive)
+  (save-excursion
+    (let ((end (point-at-eol))
+          (cnt 0)
+          (initial-point (point)))
+      (goto-char 0)
+      (while (re-search-forward "\\([{}]\\)" end t)
+        (if (string= (match-string-no-properties 0) "{")
+            (setq cnt (1+ cnt))
+          (setq cnt (1- cnt))))
+      ;; subtract one if the current line has an opening brace since we
+      ;; shouldn't add the indentation level until the following line
+      (goto-char initial-point)
+      (beginning-of-line)
+      (when (re-search-forward "{" (point-at-eol) t)
+        (setq cnt (1- cnt)))
+      cnt)))
+
+(defun dts-indent-line ()
+  (interactive)
+  (let ((indent (dts--calculate-indentation)))
+    (indent-line-to (* indent tab-width))))
+
 (defalias 'dts-parent-mode
   (if (fboundp 'prog-mode) 'prog-mode 'fundamental-mode))
 
+;;;###autoload
 (define-derived-mode dts-mode dts-parent-mode "Devicetree"
   "Major mode for editing Devicetrees"
   :group 'dts-mode
@@ -80,10 +105,12 @@
 
   (set (make-local-variable 'comment-start) "/* ")
   (set (make-local-variable 'comment-end)   " */")
-  (set (make-local-variable 'indent-tabs-mode) nil)
-  (set (make-local-variable 'comment-multi-line) t))
+  (set (make-local-variable 'comment-multi-line) t)
+  (set (make-local-variable 'indent-line-function) 'dts-indent-line))
 
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dts\\'" . dts-mode))
+;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.dtsi\\'" . dts-mode))
 
 (provide 'dts-mode)
